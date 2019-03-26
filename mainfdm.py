@@ -15,86 +15,81 @@ set characteristic velocity c=1;
 
 # the global vars:
 c = 1 #characteristic velocity
-dt = 0.1 #0.01, meshlength of t
-npxs = 20 #20, number of mesh points of x
+dt = 0.01 #0.01, meshlength of t
+npxs = 200 #20, number of mesh points of x
 a6i=[60,-2,15,-60,20,30,-3] #a kind of indexs if 6 points scheme
-#RK??
 
+# called functions
 def deriv_x(a6i,dx,u):
     '''
 v is derivatives u to x by a 6 points Tylor with mesh dx
     '''
     dj=np.arange(-3,3)
     v=np.zeros(len(u))
-    for j in dj:
-        v+=np.roll(u,dj[j])*a6i[j+4]/(a6i[0]*dx)
-        #print(v)
+    for j in dj:  #not roll dj[j], but -j!!!!!!!!!
+        v+=np.roll(u,-j)*a6i[j+4]/(a6i[0]*dx) #v=(-2*np.roll(u,3)+15*np.roll(u,2)-60*np.roll(u,1)+20*np.roll(u,0)+30*np.roll(u,-1)-3*np.roll(u,-2))/(60*dx)
     return v
 
-def RK1(c,dx,dt,t,u):
+def RK(c,dx,dt,t,u):
     '''
 u'(x) is given before by deriv_x;
 now calcu t with 1-order RK
     '''
     npts=t/dt
     for j in arange(npts):
-        u=u-c*deriv_x(a6i,dx,u)*dx/dt # un-up=-c*u'(x)*dx/dt
+        # 1st stage  # un-up=-c*u'(x)*dt; if RK1, diverse!!!!
+        u0=u
+        dF=c*deriv_x(a6i,dx,u)
+        u=u0-dt*dF
+        # 2nd stage
+        dF=c*deriv_x(a6i,dx,u)
+        u=0.75*u0+0.25*(u-dt*dF)
+        # 3rd stage
+        dF=c*deriv_x(a6i,dx,u)
+        u=(u0+2*(u-dt*dF))/3
     return u
 
-
-#main
+#main prog
 if __name__ == '__main__':
     #####################initial:
-    dx = 2*np.pi/npxs #npxs=20
+    dx = 2*np.pi/npxs #npxs
     x=np.arange(0,2*np.pi,dx)
+    u01=np.ones(len(x))
+    u01[x>=3]=0
     u0=sin(x)
 
     t1=20 #dt=0.01
     t2=50
 
     ####################solve at t=20,50, and plt:
-    u=RK1(c,dx,dt,t1,u0)
-    print(u)
+    u1=RK(c,dx,dt,t1,u0)
+    #print(u0,'\n',u1)
 
     plt.figure(1)
-    plt.plot(x,u0)
+    plt.plot(x,u1)
     plt.show()
 
     ###################spectrum analy:
-    #v=RK1()#calcu once; or diff1
-    v=np.arange(npxs)
-    v_=np.fft.ifft(u0) # a N=length(v) cpmplex array? whose k_ is 1,2,...,N
-    kr=v_.real*dx
-    ki=v_.imag*dx
-    alpha=np.arange(npxs)*dx
-    print(len(alpha),' ',len(ki))
+    X=np.arange(npxs)
+    alpha=X*dx
+    v=deriv_x(a6i,dx,u0)
+
+    #vcap, spectrum of v
+    vcap_ifft=np.fft.ifft(v) #? a N=length(v) cpmplex array, whose k_ is 1,2,...,N
+    vcap=np.zeros(npxs)+0j
+    for k in X:
+        for j in X:
+            vcap[k]=v[j]*exp(-1j*k*x[j])/npxs
+    print(vcap)
+
+    #kcap=kr+ki*1j
+    kr=vcap.real/dx #_ifft
+    ki=vcap.imag/dx
 
     plt.figure(3)
-    #plt.plot(alpha,ki)
+    plt.plot(x,x)
+    plt.plot(alpha,ki)#/15e-5
     plt.show()
 
-
-    '''
-    p1 = plt.subplot(2, 1, 1)
-    plt.title('errors of frequncy on space') 
-    plt.plot(values['x'], alpha, color='b') 
-    plt.plot(values['x'], alpha, linewidth=1.5, color='r')
-    plt.ylabel('k_i') 
-    plt.axis([-0.5, 0.5, -0.05, 1.05])
-
-    ap2 = plt.subplot(2, 1, 2) 
-    plt.plot(values['x'], alpha, color='b') 
-    plt.plot(values['x'], alpha, linewidth=1.5, color='r')
-    plt.ylabel('k_r') 
-    plt.xlabel('alpha')
-    plt.show()
-    '''
-
-#    def invsFT(k):
-    '''
-inverse Fourier tran;
-return the spectrum v_, of a certain freq the wavenumber k, of the difference v
-    '''
-#    return k;
     #print the values
-##### main end
+##### end
