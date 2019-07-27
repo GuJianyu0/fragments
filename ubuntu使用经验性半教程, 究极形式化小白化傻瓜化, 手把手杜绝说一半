@@ -1,0 +1,281 @@
+#############################ubuntu终端shell命令####################
+###########################装系统与开机引导
+#######重装系统
+...
+#直接删系统会把grab(引导?)删掉无法开机!!! 好好删????
+
+
+
+#######开机引导与修复
+...
+
+#其他具体问题:
+#卡在ttf1的login界面而无法进入Desktop:
+登录管理员就进入命令行, apt装libboost, apt装ubuntu-desktop, 然后输入sudo startx (有可能libboost给删的时候直接删就删了别的?)
+#其他可能原因抱歉此处就不知道了, 请再查: 驱动坏了, 引导文件坏了, ...坏了?
+
+
+
+
+
+###########################文件/文件夹 操作
+####cd, ls, mkdir, rmdir 之类的
+nautilus  /home/testProjects/ #以窗口的形式打开文件夹(强迫症可以 直接查看文件 啦^_^, 谁叫就讨厌 linux不用图形操作文件 呢...)
+#返回上一级目录: cd ..
+#解压/压缩
+#略
+#输出为pdf
+#!!!!!!!!
+#...
+
+
+
+###########安装
+#apt安装
+sudo apt-get update #1.更新apt, yum之类的(yum不是Ubuntu这的~~)
+(sudo) apt 或 apt-get install <softwarename>
+#解压或apt安装, 如果默认直接sudo ./configure或apt, 都到/usr里;
+#否则自建要另外--priefix
+./configure --prefix=yourpath
+#注意是库的话, apt安装要加 lib...-dev
+#apt能安装的就不用再麻烦地下载编译一条龙了了
+
+
+#C用配置编译安装一条龙(特别是github上的开源野程序),
+#其关键, makefile文件, 里面加链接, 附加条件 之类的
+#python常用setup.py, 相当于makefile??
+
+#安装boost库
+sudo apt-get install libboost-all-dev #boost库; 默认安装在 /usr/include/
+#boost库也可能缺东西, 如报错没有numeric.hpp, 那么就去官网复制一个cp到那里
+https://www.boost.org/doc/libs/1_64_0/boost/python/
+
+
+
+####mout, unmout 挂载
+#(窗口)快捷键 输入法#
+在桌面右上角按钮->设置->在左上角的搜索图标->搜"keyboard"->改快捷键
+#改变镜像源#
+(vi /etc/apt/sources.list #改文件)
+设置->down and upd 里能改
+
+####解放权限以便windows那样的界面操作
+cd <自己所想修改的文件们所在的目录>
+sudo chmod -r 777 * #解放该目录下的所有文件所有权限
+sudo chmod -r 777 <该目录下想改权限的文件夹名>/
+
+####查看内存动态
+top
+#或安装htop
+sudo apt-get install htop
+htop
+#退出都是
+在界面 按q
+
+
+
+###########输入法
+#搜狗输入法是一直以来至目前最良心的输入法了, 比垃圾微软输入法和linux默认带的强多了; 非常不方便的ubuntu 自己默认ibus
+#1.先在右上角language设置中改ibus为fctix(搜狗基于此)
+#2.找教程
+#https://blog.csdn.net/leijiezhang/article/details/53707181
+#3.经一系列的玄学操作终于打开搜狗, 然后打开搜狗自己的高级设置界面去设置(在可输入的地方双切shift能打开搜狗自带的移动图标)
+#4.搜狗词汇包直接在官网下载, 然后点击来导入即可, 只要提前安好了搜狗
+#5.总系统的输入法系统(不是搜狗部分)可能会抽风(如不能显示搜狗软盘和拼写栏, 原输入法复辟等等), 而且用设置里的选项居然没用(ubuntu设置界面该优化了)!!!!, 这时可以尝试: 在控制台输入
+fcitx-configtool
+#调出 Input Method Configuration, ->Input Method ->把sougou输入法放首位, 再放个默认的English(US). 不过也可能根本找不到任何项目!!! 这尚不知怎么回事(没有中文字体? ibus抽风?), 根本没有教程; 然后当时是重启几次突然出来的!!!...
+#6.但出来以后, 搜狗 自带的移动图标不显示 且选词面板出现乱码, 找下教程分两步:
+cd ~/.ocnfig; sudo rm rf SougouPY* sougou*; cd;
+#切换输入法到搜狗(能用了); 再右键点击搜狗自带的移动图标(不是右上角ubuntu那个垃圾配置选项), 切换到简体中文
+#但貌似这个不是永久解决办法!!!, 所以暂时先每次都搞一下吧
+
+
+
+
+
+
+###############################配置环境为计算软件################
+#链接
+########################################C/C++
+#一般自带; 编译并运行: 进入目录后:
+g++ test1.cpp test2.cpp -o filename 
+#gcc/g++都是这样; -o 来命名(无后缀), 不命名则自动a.out;
+#要把用到的文件都编译(不是所有), 不仅仅是main文件, 在这块浪费了很多时间
+#编译完成后, 运行:
+./filename
+#(include和src的问题, 原来是既可调系统的/usr/bin/include, 又可调 运行的cpp生成的程序 自身所在文件)
+
+#include到其他文件
+#方法1. 修改 .bashrc 永久加上目录
+#方法2. include的文件前加上路径
+#方法3. 编译势加上目录, 比如
+g++ src/main.cpp -o main -I include/
+
+#安装boost库
+#apt安装, 见上面
+
+#安装gsl(gnu scientific library)
+https://www.cnblogs.com/YangyaoCHEN/p/8189290.html
+#即 下载压缩包, 解压, 配置, 编译, 编译安装...; 
+#默认安装在/usr/local/, 非root或想安装在别处要按教程弄好链接
+#编译的末尾要加两条([]内的内容为按实际情况可选)
+gcc –Lyour_path/lib –Iyour_path/include  your_code_filename –lgsl –lgslcblas
+#上面这个教程很全, 详见之
+
+
+###########安装github的开源程序
+#一般步骤
+cd con m mi
+#其中注意事项看其readme
+#makefile的目录指定
+ABC=/...
+
+#例如装好edf后装TORUS
+...(略)
+cd <Torus目录>
+make CPP="%CXX -fPIC" #?? make TROUS=1 则不行
+#去掉-fPIC 
+make TORUS=1
+#又加上??
+
+#最后??
+#在tactSJ下
+make all
+#测试运行
+...doc
+... .exe
+
+
+
+
+
+
+#############################安装VSCode
+#1.在官网下载
+https://code.visualstudio.com/docs/?dv=linux64_deb
+#在网页右上角 Download (这里版本是linux64)
+#2.解压; 移动到想放的文件夹下
+#3.运行vscode
+cd <放好的vscode解压文件 所在目录>/data/usr/share/code
+./code
+#(如我这里把它命名为vscodenew, 控制台直接输入:)
+/usr/local/vscodenew/data/usr/share/code/code
+#4.打开文件: 点击左上角file ->new或open ->edit或quit
+#5.装各种扩展: 左上角-extensions, 搜索
+
+####在vscode里安装tex扩展
+#1.安装texlive, 需要配置环境??
+sudo apt install texlive
+#2.左上角-extensions, 搜"latex workshop", 下载
+#3.按搜到的这个教程修改配置文件
+https://www.jianshu.com/p/dc0ffa4368e3
+#4.测试, 也是上面那个教程链接
+#只要没错误, 按下即时显示按钮(右上角所遍文档右上角的放大镜图标), 就能在右面即时输出显示pdf; 报错在右下角
+
+#5.基本语法教程
+http://blog.sina.com.cn/s/blog_4b6a68ac010007c1.html
+#这样就能用代码打公式了(用一维符号序列操作, 省去office那样的各种插入), 非常方便
+#6.下个整个的论文例子当做模板, 以后当框架装自己要写的东西
+#范文模板??...
+
+######################(单独安装texlive)
+#要配置环境?
+链接
+#[直接apt安装 自动给找 优先用]
+sudo apt(-get?) install <> #apt安装库lib
+#[或 用iso镜像安装 还要自己下 然后编译: ?]
+
+
+
+######################FreeFem++
+#此电脑放在了  #当初乱装装错位置了
+cd ~/freefem++-3.61-1/0prog/ #psn
+#运行 于目录下
+FreeFem++ filename.edp #或.eps
+
+
+######################安装Python
+#最好用pycharm!!!!!!!!; 下为手动方式
+#注: 如果开始手动安装时乱用sudo且为撤销sudo, 则下列代码前面基本都要加sudo
+#1.下载, 控制台安装
+#2.指定为最新python3.7(和系统用的python2共存)
+#上面两步 按好的教程来:
+https://blog.csdn.net/u014775723/article/details/85213793
+#3.然后, 更新pip
+python -m pip install --upgrade pip
+#4.安装各种包
+pip install numpy scipy matplotlib vispy
+#包安在了/usr/local/lib/python3.7/site-packages (1.16.2)等; 按错位置不可用
+#matplotlib可能会遇到tk?的问题? 用下
+https://blog.csdn.net/jeryjeryjery/article/details/78865362
+
+####5.python3不能兼容运行python2的文件, 所以之前编的文件暂时不能运行, 除非重新指定(软连接?)
+
+####n+1.试着3.7.1安装在虚拟环境中, 但有问题!!!!!!!!numpy在这里安装无效:
+#下载并配置虚拟环境
+https://cloud.tencent.com/developer/article/1352636
+cd ~/0progs/python/ #存放应用代码的目录?
+source my_env/bin/activate #打开虚拟环境
+python #或python3; 在虚拟里默认的是python3.7.1, pip也是
+quit() #或 exit()
+deactivate #退出虚拟环境
+#3.那些numpy之类的包是分别置于各版本文件夹的??; 都用pip/pip3安装这些包
+sudo pip install numpy; sudo pip install scipy; sudo pip install pylab; sudo pip install matplotlib; sudo pip install vispy)
+#4.或者命令以 <python3>, 是自带3.6低版本
+#python3在/usr/bin/python3; 令出<python3>就是打开/usr里的python3(.6.7, 181022)
+#一般在各自小程序里自己 目录存档运行
+cd ~/0progs/python/files/sod-shocktube-master/
+python3 main.py
+
+
+
+#######################安装matlab
+#挂载(略); 按教程安装:
+cd ~/0progs/Matlab/bin; ./matlab #启动
+#配置和快捷设置略;
+#function文件在 ~/0progs/Matlab/0file/func
+
+
+
+################## MPI C++
+#1.安装mpich 目录??
+#2.程序
+#3.#编译
+mpicxx filename.cpp -o a
+#运行
+mpirun -np <进程数> ./a <(根据程序可能需要的)输入的参数>
+
+
+
+
+################# 服务器ssh
+#控制台:; 另外可用putty?;
+#1.登录, 例
+ssh cfd2019@159.226.199.83
+#然后输入密码
+zkycfd2019
+#2.建文件夹:; 和shell一样;
+#ls
+mkdir foldername
+#cd ~/foldername
+#3.复制 本地文件 到服务器 文件夹
+#在本地控制台目录下
+scp ~/0progs/C/file/mpim/mm.c cfd2019@159.226.199.83:~/foldername
+#然后输入密码 ...
+#4.程序运行指令跟本地的一样
+#...
+
+
+
+
+
+
+########################################查资料的经验###################
+#######################github
+#github好东西, 基本开源共享
+#注册-登录-保存网页并储存密码
+#在左上角搜索 关键词, 常能搜到想用的小程序; 或上传
+
+######################CSDN
+#新手教程
+
