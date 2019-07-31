@@ -1,4 +1,4 @@
-#############################ubuntu终端shell命令####################
+#############################ubuntu的shell命令####################
 ###########################装系统与开机引导
 #######重装系统
 ...
@@ -20,13 +20,32 @@
 
 ###########################文件/文件夹 操作
 ####cd, ls, mkdir, rmdir 之类的
-nautilus  /home/testProjects/ #以窗口的形式打开文件夹(强迫症可以 直接查看文件 啦^_^, 谁叫就讨厌 linux不用图形操作文件 呢...)
-#返回上一级目录: cd ..
+#很多目录(dictionary)有自己的简写, 如
+/..(或..); ...
+
+#以窗口的形式打开文件夹(强迫症可以 直接查看文件 啦^_^, 谁叫linux不用图形操作文件呢...)
+xdg-open /dict
+#或nautilus  /dict, 或gnome-open, ...
+
+#返回上一级目录 cd ..; 返回上次目录 cd -;
+
+#通配符*(接在前名后面)
+
 #解压/压缩
 #略
 #输出为pdf
 #!!!!!!!!
 #...
+
+
+
+#版本 ~/.bashrc, 以切换python2,3为例
+vim ~/.bashrc
+(手动改export)
+esc, :wq!保存并退出
+source .bashrc
+换个窗口之间
+
 
 
 
@@ -40,6 +59,14 @@ sudo apt-get update #1.更新apt, yum之类的(yum不是Ubuntu这的~~)
 #注意是库的话, apt安装要加 lib...-dev
 #apt能安装的就不用再麻烦地下载编译一条龙了了
 
+#?? 查找软件/包 的 完整/所有? 安装路径
+dpkg -L lib...-dev
+#查找软件包位置
+dpkg -s ...
+#查找python主要装在哪
+which python
+
+
 
 #C用配置编译安装一条龙(特别是github上的开源野程序),
 #其关键, makefile文件, 里面加链接, 附加条件 之类的
@@ -47,8 +74,9 @@ sudo apt-get update #1.更新apt, yum之类的(yum不是Ubuntu这的~~)
 
 #安装boost库
 sudo apt-get install libboost-all-dev #boost库; 默认安装在 /usr/include/
-#boost库也可能缺东西, 如报错没有numeric.hpp, 那么就去官网复制一个cp到那里
-https://www.boost.org/doc/libs/1_64_0/boost/python/
+#boost库也可能缺东西, 那么可复制一个cp到那里(安装出的.so而不是源文件.cpp)
+#(官网https://www.boost.org/doc/libs/1_64_0/boost/python/)
+#makefile那是编译环境/链接, 而运行环境都自己找/usr的(比如J.Sanders的tact包), 除非在bash添加环境变量
 
 
 
@@ -88,6 +116,13 @@ fcitx-configtool
 cd ~/.ocnfig; sudo rm rf SougouPY* sougou*; cd;
 #切换输入法到搜狗(能用了); 再右键点击搜狗自带的移动图标(不是右上角ubuntu那个垃圾配置选项), 切换到简体中文
 #但貌似这个不是永久解决办法!!!, 所以暂时先每次都搞一下吧
+
+
+
+
+
+#############################网络与电脑之间##########################
+ifconfig??
 
 
 
