@@ -1,0 +1,140 @@
+###################################################python
+#python所import的IMPORT的找
+python
+dir(IMPORT)
+#会列出其module如MODULE
+from IMPORT import MODULE
+
+#shell下找.so文件的东西
+nm filename.so #列出全部（每个的地址类型名称）
+nm filename.so | grep A #是否有A， 有则下面列一行， 没有则不反应
+
+
+
+
+
+#################################################other small softwares
+gnuchess: download it in updates&software, then apt install xboard and run xboard (cannot gunchess?), if no xboard, run gnuchess and input move
+
+
+
+
+
+#################################################C++
+unsigned int <>;//无正负符号(整型)
+
+
+//typrdef, 重命名
+//PST等价于struct Student*
+//ST等价于struct Student
+typedef struct Student
+{
+   int id;
+   char sex;
+}* PST，ST;
+
+double c=.7;
+double b=c*-2.5;//just multi by (-...)
+
+
+
+//<vector>容器的功能
+https://www.cnblogs.com/yinheyi/p/7504041.html
+
+#include <vector>
+typedef <...>
+VecDoub X(6,0.);
+
+
+
+//std容器 类似一个类 ?; 有cerr
+std::cerr<<"Using Piffl14 GalPot"<<std::endl;
+
+typedef struct
+{
+    int a;
+    char b;
+    double c; 
+} Simple2;
+Simple2 u1, u2[20], *u3;
+//区别: (引用)  struct作为数据结构的实现体，它默认的数据访问控制是public的，而class作为对象的实现体，它默认的成员变量访问控制是private的。
+//我依旧强调struct是一种数据结构的实现体，虽然它是可以像class一样的用。我依旧将struct里的变量叫数据，class内的变量叫成员，虽然它们并无区别。到底是用struct还是class，完全看个人的喜好，你可以将程序里所有的class全部替换成struct，它依旧可以很正常的运行。但我给出的最 好建议，还是：当你觉得你要做的更像是一种数据结构的话，那么用struct，如果你要做的更像是一种对象的话，那么用class。 
+//class”这个关键字还用于定义模板参数，就像“typename”。但关键字“struct”不用于定义模板参数。
+
+
+
+//==========================指针
+int a=7; int *b=&a;//等式左边不是运算, 不能理解为*b怎么变成等式右边地址了(烂) //非言"指b"(b是个地址而且就是个专门指向a的地址, 不动了, 而读作"*b是&a上的数"容易理解误导, b类型是int*而不是&), 而是"b指"(用b 指向 地址\的a), 右序
+long a=7; long * p=&a; cout<<p<<' ' <<*p<<' ' <<&p<<endl;
+int** q=&p; cout<<q<<"  "<<&q;
+
+//数组
+//https://www.csdn.net/gather_2c/MtTaAg3sMzcyLWJsb2cO0O0O.html
+int ia[4]; for(int i=0;i<4;i++){ia[i]=i;}//cannot int * ia[4];
+std::cout<<ia<<' '<<ia[0]<<' '<<*ia<<' '<<&ia<<std::endl;
+int* ptr=ia; cout<<ptr<<' '<<*ptr<<' '<<*(ptr+1000)<<endl;//may go beyond to unknown position
+vector<int> vec3(ia, ia+2); //give value from *ia to *(ia+2)
+for(int i=0;i<4;i++){std::cout<<vec3[i*10]<<std::endl;}
+
+char*a="abcd"; //此时"abcd"存放在常量区, 通过指针只可以访问字符串常量，而不可以改变它
+char a[30]="abcd"; //此时"abcd"存放在栈, 可以通过指针去访问和修改数组内容
+
+char *a[] 表示的是数组a[]是一个指向char的指针类型数组，相当于a[]里面的每一个元素都实际值都是一个指向字符串的指针(即存储某个字符串的首地址)
+char (*a) [N] 表示的是指向一个元素为N的字符串数组的指针，说白了就是一个数组指针（指向数组的指针）。这个和函数指针有点像 int (*p) (int,int),表示指向返回值为int,并且含有2个int变量的函数
+
+//参(double* A) 相当于调用数组参数了, 只不过直接*A的值是第一个(A[0])的值
+
+char a='a'; char* p=&a; for(unsigned int i=0; i<43967; i++){ cout<<*(p+i)<<'='<<(int)*(p+i)<<' ';} 
+//short int a=7; short int* b=&a; //for(unsigned int i=0; i<43967; i++){ cout<<*(b+i)<<' '<<(char)*(b+i)<<endl;}
+//for(int i=0; i<43;i++) {cout<<*(b+i)<<' ';} cout<<endl;
+for(int i=0; i<43;i++) {cout<<(char)*(b+i);} cout<<endl;
+//for(short int i=0; i<3;++i){cout<<' '<<(char)i;}
+////总结, 它是没法读了(遇到(char)(short int值)不是char的已有)就不读了, 但要是连着加一个相应值就可以, 因为又指针了??
+
+nullptr //空指针, c++11开始代替NULL以免重载歧义
+https://www.cnblogs.com/porter/p/3611718.html
+
+
+
+//类的初始化
+https://www.cnblogs.com/zhangnianyong/p/9415437.html
+//与类名同名的构造?函数中, 用:或用一般的函数形式
+
+//浮点数数据误差eps处理 //补
+https://blog.csdn.net/qq_40907279/article/details/81265253
+
+//虚函数
+虚函数是指一个类中你希望重载的成员函数 ，当你用一个  基类指针或引用   指向一个继承类对象的时候，调用一个虚函数时, 实际调用的是继承类的版本。
+
+//VScode的C插件很好用, 用的都是正常编辑快捷键
+//右键函数-->goto defination能直接打开另一文件; 若.cpp中未能标出颜色, 则在其.h中找(智能看的是一阶include); 遇到#ifdef下轻色的, 则注释掉等复原右键找
+
+//在C++中，函数void func(int &p,int q)中的第一个形式参数p是“int型引用”类型。引用是C++的特殊变量类型，它是已有变量的别名。主调函数调用func把实参传给p时，实际上是给实参起了个别名p，所以在函数中对p的操作就是对主调函数中的对应实参的操作，将会使实参发生永久性改变。而func中的第二个形参int q是普通的int类型，调用时只是将实参的“值”拷贝给q，所以在函数中对q的操作并不影响主调函数中的实参值。?
+int a; int &p=a;
+
+
+throw();//抛出异常
+
+//  /tact/pot/potential.h的Potential_JS::R_E的root_find类, 定义在/tact/general/GSLInterface/GSLInterface.h, 看这个以及相应gsl
+
+std::cerr<<"7777777777777777"<<std::endl; //cerr报错内容写在输出最后
+
+// :: 和 . 和 -> 的使用区别
+https://blog.csdn.net/qq_41598072/article/details/81060781
+//先概者::, 类的已经对象., 指针类的->
+
+
+
+//编译
+//编译选项
+https://blog.csdn.net/woshinia/article/details/11060797
+//c++11 c++14 c++17
+https://blog.csdn.net/zhousiwei/article/details/80989531
+
+g++ -std==c++11
+//否则tact程序报错 要用c++11
+
+
+auto a=7.; //C++11中引入auto第一种作用是为了自动类型推导
+
+
